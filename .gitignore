@@ -1,0 +1,4 @@
+﻿.env
+bigquery_key.json
+data/
+venv/
