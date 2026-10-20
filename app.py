@@ -9,9 +9,30 @@ import time
 
 st.set_page_config(page_title="Arsenal Pro AI - Real-Time Tactics", layout="wide")
 
+st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", width=70)
+st.sidebar.title("Navigation IA")
+
 # ---------------------------------------------------------
-# 1. DATA PARSING & SESSION STATE INITS
+# MENU DE NAVIGATION STREAMLIT
 # ---------------------------------------------------------
+app_mode = st.sidebar.radio("Sélectionnez le module :", ["Moteur Tactique (Live)", "Vision par Ordinateur (YOLO)"])
+
+if app_mode == "Vision par Ordinateur (YOLO)":
+    st.title("👁️ Détection IA (YOLOv8s + K-Means)")
+    st.markdown("Analyse visuelle des flux de diffusion (Broadcast) pour l'identification automatique des équipes et du ballon.")
+    
+    try:
+        st.image("vision_pro_result.png", caption="Détection et classification via Deep Learning", use_column_width=True)
+    except FileNotFoundError:
+        st.warning("L'image vision_pro_result.png est introuvable. Exécutez le script vision.py en premier.")
+        
+    st.stop() # Empêche l'exécution du reste du code si on est sur la page Vision
+
+# ---------------------------------------------------------
+# 1. DATA PARSING & SESSION STATE INITS (MOTEUR TACTIQUE)
+# ---------------------------------------------------------
+st.title("⚽ Arsenal Pro AI — Real-Time Playback Engine")
+
 @st.cache_data
 def load_data():
     url_home = "https://raw.githubusercontent.com/metrica-sports/sample-data/master/data/Sample_Game_1/Sample_Game_1_RawTrackingData_Home_Team.csv"
@@ -93,10 +114,6 @@ def calculate_passing_lanes(passer_pos, teammates, opponents):
 # ---------------------------------------------------------
 # 3. STREAMLIT UI & PLAYBACK CONTROLS
 # ---------------------------------------------------------
-st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg", width=70)
-st.title("⚽ Arsenal Pro AI — Real-Time Playback Engine")
-
-# Playback Sidebar Controls
 st.sidebar.header("⏱️ Real-Time Match Player")
 btn_col1, btn_col2 = st.sidebar.columns(2)
 
